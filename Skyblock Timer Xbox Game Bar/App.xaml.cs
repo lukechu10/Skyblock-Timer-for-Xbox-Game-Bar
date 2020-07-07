@@ -11,7 +11,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 	/// Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
 	public sealed partial class App : Application {
-		private XboxGameBarWidget widget1 = null;
+		private XboxGameBarWidget _widget1 = null;
 
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
@@ -24,6 +24,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 
 		protected override void OnActivated(IActivatedEventArgs args) {
 			XboxGameBarWidgetActivatedEventArgs widgetArgs = null;
+
 			if (args.Kind == ActivationKind.Protocol) {
 				var protocolArgs = args as IProtocolActivatedEventArgs;
 				string scheme = protocolArgs.Uri.Scheme;
@@ -62,14 +63,14 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 					Window.Current.Content = rootFrame;
 
 					// Create Game Bar widget object which bootstraps the connection with Game Bar
-					this.widget1 = new XboxGameBarWidget(
+					this._widget1 = new XboxGameBarWidget(
 						widgetArgs,
 						Window.Current.CoreWindow,
 						rootFrame);
+
 					rootFrame.Navigate(typeof(Widget1));
 
 					Window.Current.Closed += this.Widget1Window_Closed;
-
 					Window.Current.Activate();
 				}
 				else {
@@ -79,7 +80,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		}
 
 		private void Widget1Window_Closed(object sender, Windows.UI.Core.CoreWindowEventArgs e) {
-			this.widget1 = null;
+			this._widget1 = null;
 			Window.Current.Closed -= this.Widget1Window_Closed;
 		}
 
@@ -142,7 +143,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		/// <param name="e">Details about the suspend request.</param>
 		private void OnSuspending(object sender, SuspendingEventArgs e) {
 			var deferral = e.SuspendingOperation.GetDeferral();
-			this.widget1 = null;
+			this._widget1 = null;
 			deferral.Complete();
 		}
 	}

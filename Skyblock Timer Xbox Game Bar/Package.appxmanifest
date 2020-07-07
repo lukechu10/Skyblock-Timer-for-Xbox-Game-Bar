@@ -55,6 +55,21 @@
                              DisplayName="Hypixel Skyblock Timers"
                              Description="A widget for Xbox Gamebar to show timers for hypixel skyblock"
                              PublicFolder="GameBar">
+            <uap3:Properties>
+              <GameBarWidget Type="Standard">
+                <PinningSupported>True</PinningSupported>
+                <Window>
+                  <Size>
+                    <Height>300</Height>
+                    <Width>400</Width>
+                  </Size>
+                  <ResizeSupported>
+                    <Horizontal>true</Horizontal>
+                    <Vertical>true</Vertical>
+                  </ResizeSupported>
+                </Window>
+              </GameBarWidget>
+            </uap3:Properties>
           </uap3:AppExtension>
         </uap3:Extension>
       </Extensions>

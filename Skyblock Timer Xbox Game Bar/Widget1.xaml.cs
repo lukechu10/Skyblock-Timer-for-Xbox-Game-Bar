@@ -10,5 +10,10 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		public Widget1() {
 			this.InitializeComponent();
 		}
+
+		private void RefreshButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+			RefreshButton.Content = "Refreshed!";
+			TimerList.Items.Add(new SkyblockTimerViewModel());
+		}
 	}
 }

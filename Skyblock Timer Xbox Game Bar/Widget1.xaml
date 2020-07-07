@@ -5,10 +5,22 @@
     xmlns:local="using:Skyblock_Timer_Xbox_Game_Bar"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock Text="Xbox!"/>
-    </Grid>
+    <Page.Resources>
+        <DataTemplate x:Key="TimerListViewTemplate" x:DataType="local:SkyblockTimerViewModel">
+            <TextBlock Text="{x:Bind TimeToEvent.TotalSeconds, Mode=OneWay}"/>
+        </DataTemplate>
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Visible"
+                  HorizontalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Padding="10">
+            <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Style="{StaticResource ButtonRevealStyle}"/>
+
+            <ListView x:Name="TimerList" SelectionMode="None" ItemTemplate="{StaticResource TimerListViewTemplate}"/>
+        </StackPanel>
+    </ScrollViewer>
 </Page>
