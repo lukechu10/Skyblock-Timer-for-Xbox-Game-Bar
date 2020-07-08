@@ -37,7 +37,10 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 					Interval = TimeSpan.FromSeconds(1)
 				}; // update time every second
 
-				this._dispatcherTimer.Tick += new EventHandler<object>(this.dispatcherTimerTick);
+				this._dispatcherTimer.Tick += (object sender, object e) => {
+					this._timeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
+					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeTimeMessage")); // update view
+				};
 
 				this._dispatcherTimer.Start();
 			}
@@ -45,11 +48,6 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				// TODO: show error
 				Debug.WriteLine(err);
 			}
-		}
-
-		private void dispatcherTimerTick(object sender, object e) {
-			this._timeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeTimeMessage")); // update view
 		}
 
 		public Uri QueryUrl { get; private set; }
