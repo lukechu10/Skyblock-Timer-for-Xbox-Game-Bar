@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
 namespace Skyblock_Timer_Xbox_Game_Bar {
@@ -9,36 +11,49 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private TimeSpan _timeToEvent;
-		private readonly DispatcherTimer _dispatcherTimer;
+		private DispatcherTimer _dispatcherTimer;
+		private static readonly HttpClient _httpClient = new HttpClient();
 
-		public SkyblockTimerViewModel() {
-			this._timeToEvent = TimeSpan.FromMinutes(60); // placeholder
+		public SkyblockTimerViewModel(Uri queryUrl) {
+			this.QueryUrl = queryUrl;
+			if (this.QueryUrl == null) throw new ArgumentException("queryUrl can not be null");
 
-			this._dispatcherTimer = new DispatcherTimer() {
-				Interval = TimeSpan.FromSeconds(1)
-			}; // update time every second
+			_ = this.setupTimer();
+		}
 
-			this._dispatcherTimer.Tick += new EventHandler<object>(dispatcherTimerTick);
+		/// <summary>
+		/// Queries the url specified by <c>QueryUrl</c> and starts the timer with the returned time
+		/// </summary>
+		private async Task setupTimer() {
+			try {
+				string responseStr = await _httpClient.GetStringAsync(this.QueryUrl);
 
-			this._dispatcherTimer.Start();
+				MagmaResponseSchema response = JsonConvert.DeserializeObject<MagmaResponseSchema>(responseStr);
+				long estimateTimestamp = response.estimate; // unix time stamp for next spawn estimate
+				DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(estimateTimestamp).UtcDateTime;
+				this._timeToEvent = dateTime - DateTime.UtcNow;
+
+				this._dispatcherTimer = new DispatcherTimer() {
+					Interval = TimeSpan.FromSeconds(1)
+				}; // update time every second
+
+				this._dispatcherTimer.Tick += new EventHandler<object>(this.dispatcherTimerTick);
+
+				this._dispatcherTimer.Start();
+			}
+			catch (Exception err) {
+				// TODO: show error
+				Debug.WriteLine(err);
+			}
 		}
 
 		private void dispatcherTimerTick(object sender, object e) {
-			this.TimeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
-			Debug.WriteLine(this._timeToEvent.TotalSeconds);
+			this._timeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeTimeMessage")); // update view
 		}
 
-		public TimeSpan TimeToEvent {
-			set {
-				this._timeToEvent = value;
-				//this.OnPropertyChanged();
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToEvent"));
-			}
-			get => this._timeToEvent;
-		}
+		public Uri QueryUrl { get; private set; }
 
-		protected void OnPropertyChanged([CallerMemberName] string name = null) {
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-		}
+		public string RelativeTimeMessage => $"in {this._timeToEvent.Hours} hours {this._timeToEvent.Minutes} minutes and {this._timeToEvent.Seconds} seconds";
 	}
 }

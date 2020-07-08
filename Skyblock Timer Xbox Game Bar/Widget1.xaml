@@ -11,7 +11,7 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TimerListViewTemplate" x:DataType="local:SkyblockTimerViewModel">
-            <TextBlock Text="{x:Bind TimeToEvent.TotalSeconds, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind RelativeTimeMessage, Mode=OneWay}"/>
         </DataTemplate>
     </Page.Resources>
 

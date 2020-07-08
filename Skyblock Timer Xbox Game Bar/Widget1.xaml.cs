@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System;
+using Windows.UI.Xaml.Controls;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -12,8 +13,10 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		}
 
 		private void RefreshButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
-			RefreshButton.Content = "Refreshed!";
-			TimerList.Items.Add(new SkyblockTimerViewModel());
+			this.RefreshButton.Content = "Refreshed!";
+			this.TimerList.Items.Add(
+				new SkyblockTimerViewModel(Constants.MAGMA_ESTIMATE_URL)
+			);
 		}
 	}
 }
