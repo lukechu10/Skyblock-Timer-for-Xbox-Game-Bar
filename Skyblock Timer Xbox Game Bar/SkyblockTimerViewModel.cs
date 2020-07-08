@@ -60,9 +60,13 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 
 				this._dispatcherTimer.Start();
 			}
-			catch (Exception err) {
-				// TODO: show error
+			catch (HttpRequestException err) {
 				Debug.WriteLine(err);
+				this.RelativeTimeMessage = "Error connecting to server";
+			}
+			catch (Exception err) {
+				Debug.WriteLine(err);
+				this.RelativeTimeMessage = "An unknown error occured";
 			}
 		}
 	}
