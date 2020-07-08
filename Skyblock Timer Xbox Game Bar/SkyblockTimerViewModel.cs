@@ -59,7 +59,13 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 
 				this._dispatcherTimer.Tick += (object sender, object e) => {
 					this._timeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
-					this.RelativeTimeMessage = $"in about {this._timeToEvent.Hours} hours {this._timeToEvent.Minutes} minutes and {this._timeToEvent.Seconds} seconds";
+
+					if (this._timeToEvent.TotalSeconds <= 0) {
+						_ = this.RefreshTimerWithServer(); // get next time from server
+					}
+					else {
+						this.RelativeTimeMessage = $"in about {this._timeToEvent.Hours} hours {this._timeToEvent.Minutes} minutes and {this._timeToEvent.Seconds} seconds";
+					}
 				};
 
 				this._dispatcherTimer.Start();
