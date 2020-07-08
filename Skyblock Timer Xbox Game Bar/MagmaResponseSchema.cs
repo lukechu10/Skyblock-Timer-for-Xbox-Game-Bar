@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Skyblock_Timer_Xbox_Game_Bar {
 	public sealed class MagmaResponseSchema {
-		bool success;
-		string msg;
+		public bool success;
+		public string msg;
 		public long estimate;
 	}
 }

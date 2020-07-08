@@ -11,7 +11,10 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TimerListViewTemplate" x:DataType="local:SkyblockTimerViewModel">
-            <TextBlock Text="{x:Bind RelativeTimeMessage, Mode=OneWay}"/>
+            <StackPanel>
+                <TextBlock Text="{x:Bind Name, Mode=OneTime}" Style="{StaticResource BaseTextBlockStyle}"/>
+                <TextBlock Text="{x:Bind RelativeTimeMessage, Mode=OneWay}"/>
+            </StackPanel>
         </DataTemplate>
     </Page.Resources>
 

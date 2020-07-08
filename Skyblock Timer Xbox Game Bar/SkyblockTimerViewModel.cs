@@ -14,17 +14,33 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		private DispatcherTimer _dispatcherTimer;
 		private static readonly HttpClient _httpClient = new HttpClient();
 
-		public SkyblockTimerViewModel(Uri queryUrl) {
-			this.QueryUrl = queryUrl;
-			if (this.QueryUrl == null) throw new ArgumentException("queryUrl can not be null");
+		/// <summary>
+		/// Name of the timer (e.g. "Magma Boss")
+		/// </summary>
+		public string Name { get; private set; }
+		public Uri QueryUrl { get; private set; }
 
-			_ = this.setupTimer();
+		private string _relativeTimeMessage;
+		public string RelativeTimeMessage {
+			get => this._relativeTimeMessage;
+			private set {
+				this._relativeTimeMessage = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeTimeMessage"));
+			}
+		}
+
+		public SkyblockTimerViewModel(string name, Uri queryUrl) {
+			this.Name = name;
+			this.QueryUrl = queryUrl;
+			this.RelativeTimeMessage = "Loading...";
+
+			_ = this.SetupTimer();
 		}
 
 		/// <summary>
 		/// Queries the url specified by <c>QueryUrl</c> and starts the timer with the returned time
 		/// </summary>
-		private async Task setupTimer() {
+		private async Task SetupTimer() {
 			try {
 				string responseStr = await _httpClient.GetStringAsync(this.QueryUrl);
 
@@ -39,7 +55,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 
 				this._dispatcherTimer.Tick += (object sender, object e) => {
 					this._timeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
-					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeTimeMessage")); // update view
+					this.RelativeTimeMessage = $"in about {this._timeToEvent.Hours} hours {this._timeToEvent.Minutes} minutes and {this._timeToEvent.Seconds} seconds";
 				};
 
 				this._dispatcherTimer.Start();
@@ -49,9 +65,5 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				Debug.WriteLine(err);
 			}
 		}
-
-		public Uri QueryUrl { get; private set; }
-
-		public string RelativeTimeMessage => $"in {this._timeToEvent.Hours} hours {this._timeToEvent.Minutes} minutes and {this._timeToEvent.Seconds} seconds";
 	}
 }
