@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Skyblock_Timer_Xbox_Game_Bar {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
 	public sealed partial class Widget1 : Page {
 		private readonly List<SkyblockTimerViewModel> _timerList;
 
@@ -30,8 +28,27 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			}
 		}
 
+		private List<Task> _refreshTaskList;
+
 		private void RefreshButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
-			this.RefreshButton.Content = "Not implemented yet!";
+			_ = this.RefreshAllTimers();
+		}
+
+		private async Task RefreshAllTimers() {
+			this.RefreshButton.Content = "Refreshing...";
+			RefreshButton.IsEnabled = false;
+
+			this._refreshTaskList = new List<Task>();
+
+			foreach (var timer in this._timerList) {
+				timer.RelativeTimeMessage = "Refreshing...";
+				this._refreshTaskList.Add(timer.RefreshTimerWithServer());
+			}
+
+			await Task.WhenAll(this._refreshTaskList.ToArray());
+
+			this.RefreshButton.Content = "Refresh";
+			RefreshButton.IsEnabled = true;
 		}
 	}
 }

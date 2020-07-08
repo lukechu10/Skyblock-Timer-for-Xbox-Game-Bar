@@ -24,7 +24,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		private string _relativeTimeMessage;
 		public string RelativeTimeMessage {
 			get => this._relativeTimeMessage;
-			private set {
+			set {
 				this._relativeTimeMessage = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeTimeMessage"));
 			}
@@ -36,14 +36,16 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			this.RelativeTimeMessage = "Loading...";
 			this.ImageSource = imageSource;
 
-			_ = this.SetupTimer();
+			_ = this.RefreshTimerWithServer();
 		}
 
 		/// <summary>
 		/// Queries the url specified by <c>QueryUrl</c> and starts the timer with the returned time
 		/// </summary>
-		private async Task SetupTimer() {
+		public async Task RefreshTimerWithServer() {
 			try {
+				this._dispatcherTimer?.Stop(); // stop current timer if exists
+
 				string responseStr = await _httpClient.GetStringAsync(this.QueryUrl);
 
 				ResponseSchema response = JsonConvert.DeserializeObject<ResponseSchema>(responseStr);
