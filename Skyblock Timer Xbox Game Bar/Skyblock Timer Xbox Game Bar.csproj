@@ -129,7 +129,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
-    <Compile Include="MagmaResponseSchema.cs" />
+    <Compile Include="ResponseSchema.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkyblockTimerViewModel.cs" />
     <Compile Include="Widget1.xaml.cs">
@@ -188,6 +188,15 @@
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\TimerIcons\BroodMother.png" />
+    <Content Include="Assets\TimerIcons\DarkAuction.png" />
+    <Content Include="Assets\TimerIcons\JerrysWorkshop.png" />
+    <Content Include="Assets\TimerIcons\MagmaCube.png" />
+    <Content Include="Assets\TimerIcons\NewYearCake.png" />
+    <Content Include="Assets\TimerIcons\BankInterest.png" />
+    <Content Include="Assets\TimerIcons\SpookyFestival.png" />
+    <Content Include="Assets\TimerIcons\TravellingZoo.png" />
+    <Content Include="Assets\TimerIcons\WinterEvent.png" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />

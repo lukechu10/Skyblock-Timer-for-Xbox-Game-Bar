@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
 namespace Skyblock_Timer_Xbox_Game_Bar {
-	class SkyblockTimerViewModel : INotifyPropertyChanged {
+	public sealed class SkyblockTimerViewModel : INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private TimeSpan _timeToEvent;
@@ -19,6 +19,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		/// </summary>
 		public string Name { get; private set; }
 		public Uri QueryUrl { get; private set; }
+		public string ImageSource { get; private set; }
 
 		private string _relativeTimeMessage;
 		public string RelativeTimeMessage {
@@ -29,10 +30,11 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			}
 		}
 
-		public SkyblockTimerViewModel(string name, Uri queryUrl) {
+		public SkyblockTimerViewModel(string name, Uri queryUrl, string imageSource = "Assets/StoreLogo.png") {
 			this.Name = name;
 			this.QueryUrl = queryUrl;
 			this.RelativeTimeMessage = "Loading...";
+			this.ImageSource = imageSource;
 
 			_ = this.SetupTimer();
 		}
@@ -44,7 +46,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			try {
 				string responseStr = await _httpClient.GetStringAsync(this.QueryUrl);
 
-				MagmaResponseSchema response = JsonConvert.DeserializeObject<MagmaResponseSchema>(responseStr);
+				ResponseSchema response = JsonConvert.DeserializeObject<ResponseSchema>(responseStr);
 				long estimateTimestamp = response.estimate; // unix time stamp for next spawn estimate
 				DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(estimateTimestamp).UtcDateTime;
 				this._timeToEvent = dateTime - DateTime.UtcNow;

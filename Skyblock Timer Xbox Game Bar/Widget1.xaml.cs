@@ -14,15 +14,15 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			this.InitializeComponent();
 
 			this._timerList = new List<SkyblockTimerViewModel>() {
-				new SkyblockTimerViewModel("Magma Boss Spawn", Constants.MAGMA_ESTIMATE_URL),
-				new SkyblockTimerViewModel("New Year Event", Constants.NEWYEAR_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Zoo Event", Constants.ZOO_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Winter Event", Constants.WINTER_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Jerry's Workshop Event", Constants.JERRYS_WORKSHOP_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Spooky Festival Event", Constants.SPOOKY_FESTIVAL_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Dark Auction", Constants.DARK_AUCTION_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Brood Mother Boss Spawn", Constants.BROOD_MOTHER_ESTIMATE_URL),
-				new SkyblockTimerViewModel("Bank Interest Timer", Constants.INTEREST_ESTIMATE_URL)
+				new SkyblockTimerViewModel("Magma Boss Spawn", Constants.MAGMA_ESTIMATE_URL, "Assets/TimerIcons/MagmaCube.png"),
+				new SkyblockTimerViewModel("New Year Event", Constants.NEWYEAR_ESTIMATE_URL, "Assets/TimerIcons/NewYearCake.png"),
+				new SkyblockTimerViewModel("Zoo Event", Constants.ZOO_ESTIMATE_URL, "Assets/TimerIcons/TravellingZoo.png"),
+				new SkyblockTimerViewModel("Winter Event", Constants.WINTER_ESTIMATE_URL, "Assets/TimerIcons/WinterEvent.png"),
+				new SkyblockTimerViewModel("Jerry's Workshop Event", Constants.JERRYS_WORKSHOP_ESTIMATE_URL, "Assets/TimerIcons/JerrysWorkshop.png"),
+				new SkyblockTimerViewModel("Spooky Festival Event", Constants.SPOOKY_FESTIVAL_ESTIMATE_URL, "Assets/TimerIcons/SpookyFestival.png"),
+				new SkyblockTimerViewModel("Dark Auction", Constants.DARK_AUCTION_ESTIMATE_URL, "Assets/TimerIcons/DarkAuction.png"),
+				new SkyblockTimerViewModel("Brood Mother Boss Spawn", Constants.BROOD_MOTHER_ESTIMATE_URL, "Assets/TimerIcons/BroodMother.png"),
+				new SkyblockTimerViewModel("Bank Interest Timer", Constants.INTEREST_ESTIMATE_URL, "Assets/TimerIcons/BankInterest.png")
 			};
 
 			foreach (var timer in this._timerList) {

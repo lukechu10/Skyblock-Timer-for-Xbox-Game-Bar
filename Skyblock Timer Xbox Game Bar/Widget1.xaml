@@ -11,9 +11,12 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TimerListViewTemplate" x:DataType="local:SkyblockTimerViewModel">
-            <StackPanel>
-                <TextBlock Text="{x:Bind Name, Mode=OneTime}" Style="{StaticResource BaseTextBlockStyle}"/>
-                <TextBlock Text="{x:Bind RelativeTimeMessage, Mode=OneWay}"/>
+            <StackPanel Orientation="Horizontal" Padding="3">
+                <Image Width="50" Source="{x:Bind ImageSource}" Margin="0,0,15,0"/>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{x:Bind Name, Mode=OneTime}" Style="{StaticResource BaseTextBlockStyle}"/>
+                    <TextBlock Text="{x:Bind RelativeTimeMessage, Mode=OneWay}"/>
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
