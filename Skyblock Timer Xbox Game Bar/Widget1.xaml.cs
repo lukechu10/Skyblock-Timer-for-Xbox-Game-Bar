@@ -75,10 +75,15 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				this._refreshTaskList.Add(timer.RefreshTimerWithServer());
 			}
 
-			await Task.WhenAll(this._refreshTaskList.ToArray());
+			try {
+				await Task.WhenAll(this._refreshTaskList.ToArray());
+			}
+			finally {
+				// always perform this step
+				this.RefreshButton.Content = "Refresh";
+				this.RefreshButton.IsEnabled = true;
 
-			this.RefreshButton.Content = "Refresh";
-			this.RefreshButton.IsEnabled = true;
+			}
 		}
 
 		private void FilterChanged(object sender, SelectionChangedEventArgs e) {

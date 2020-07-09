@@ -73,10 +73,12 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			catch (HttpRequestException err) {
 				Debug.WriteLine(err);
 				this.RelativeTimeMessage = "Error connecting to server";
+				this.TimeToEvent = TimeSpan.FromDays(double.PositiveInfinity); // put error events last when sorting by time to event
 			}
 			catch (Exception err) {
 				Debug.WriteLine(err);
 				this.RelativeTimeMessage = "An unknown error occured";
+				this.TimeToEvent = TimeSpan.FromDays(double.PositiveInfinity); // put error events last when sorting by time to event
 			}
 		}
 	}
