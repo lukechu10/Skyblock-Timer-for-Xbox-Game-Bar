@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
 namespace Skyblock_Timer_Xbox_Game_Bar {
+	public enum TimerType: byte {
+		All,
+		Boss,
+		Event
+	}
+
 	public sealed class SkyblockTimerViewModel : INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,6 +26,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		public string Name { get; private set; }
 		public Uri QueryUrl { get; private set; }
 		public string ImageSource { get; private set; }
+		public TimerType Type { get; private set; }
 
 		private string _relativeTimeMessage;
 		public string RelativeTimeMessage {
@@ -30,11 +37,12 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			}
 		}
 
-		public SkyblockTimerViewModel(string name, Uri queryUrl, string imageSource = "Assets/StoreLogo.png") {
+		public SkyblockTimerViewModel(string name, Uri queryUrl, string imageSource, TimerType timerType) {
 			this.Name = name;
 			this.QueryUrl = queryUrl;
 			this.RelativeTimeMessage = "Loading...";
 			this.ImageSource = imageSource;
+			this.Type = timerType;
 
 			_ = this.RefreshTimerWithServer();
 		}
@@ -52,6 +60,8 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				long estimateTimestamp = response.estimate; // unix time stamp for next spawn estimate
 				DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(estimateTimestamp).UtcDateTime;
 				this.TimeToEvent = dateTime - DateTime.UtcNow;
+
+				this.RelativeTimeMessage = $"in about {this.TimeToEvent.Hours} hours {this.TimeToEvent.Minutes} minutes and {this.TimeToEvent.Seconds} seconds"; // show initial message
 
 				this._dispatcherTimer = new DispatcherTimer() {
 					Interval = TimeSpan.FromSeconds(1)
@@ -73,12 +83,12 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			catch (HttpRequestException err) {
 				Debug.WriteLine(err);
 				this.RelativeTimeMessage = "Error connecting to server";
-				this.TimeToEvent = TimeSpan.FromDays(double.PositiveInfinity); // put error events last when sorting by time to event
+				this.TimeToEvent = TimeSpan.FromDays(1000); // put error events last when sorting by time to event
 			}
 			catch (Exception err) {
 				Debug.WriteLine(err);
 				this.RelativeTimeMessage = "An unknown error occured";
-				this.TimeToEvent = TimeSpan.FromDays(double.PositiveInfinity); // put error events last when sorting by time to event
+				this.TimeToEvent = TimeSpan.FromDays(1000); // put error events last when sorting by time to event
 			}
 		}
 	}
