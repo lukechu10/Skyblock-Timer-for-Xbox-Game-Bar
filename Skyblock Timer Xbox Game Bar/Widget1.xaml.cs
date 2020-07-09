@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
@@ -7,6 +9,11 @@ using Windows.UI.Xaml.Controls;
 namespace Skyblock_Timer_Xbox_Game_Bar {
 	public sealed partial class Widget1 : Page {
 		private readonly List<SkyblockTimerViewModel> _timerList;
+		//private List<SkyblockTimerViewModel> _visibleTimerList;
+		private string _filterSelection;
+		private string _sortSelection = "Time to event";
+
+		private List<Task> _refreshTaskList;
 
 		public Widget1() {
 			this.InitializeComponent();
@@ -23,20 +30,43 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				new SkyblockTimerViewModel("Bank Interest Timer", Constants.INTEREST_ESTIMATE_URL, "Assets/TimerIcons/BankInterest.png")
 			};
 
-			foreach (var timer in this._timerList) {
-				this.TimerList.Items.Add(timer);
+			this.UpdateVisibleTimerList();
+		}
+
+		private void UpdateVisibleTimerList() {
+			if (this._timerList != null) {
+				// update sort paramater
+				switch (this._sortSelection) {
+					case "Name":
+						this._timerList.Sort((SkyblockTimerViewModel a, SkyblockTimerViewModel b) => {
+							return a.Name.CompareTo(b.Name);
+						});
+
+						break;
+					case "Time to event":
+						this._timerList.Sort((SkyblockTimerViewModel a, SkyblockTimerViewModel b) => {
+							return a.TimeToEvent.CompareTo(b.TimeToEvent);
+						});
+						break;
+					default:
+						throw new Exception(); // should never happen
+				}
+
+				this.TimerList.Items.Clear();
+				foreach (var timer in this._timerList) {
+					this.TimerList.Items.Add(timer);
+				}
 			}
 		}
 
-		private List<Task> _refreshTaskList;
-
 		private void RefreshButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
 			_ = this.RefreshAllTimers();
+			this.UpdateVisibleTimerList();
 		}
 
 		private async Task RefreshAllTimers() {
 			this.RefreshButton.Content = "Refreshing...";
-			RefreshButton.IsEnabled = false;
+			this.RefreshButton.IsEnabled = false;
 
 			this._refreshTaskList = new List<Task>();
 
@@ -48,7 +78,20 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			await Task.WhenAll(this._refreshTaskList.ToArray());
 
 			this.RefreshButton.Content = "Refresh";
-			RefreshButton.IsEnabled = true;
+			this.RefreshButton.IsEnabled = true;
+		}
+
+		private void FilterChanged(object sender, SelectionChangedEventArgs e) {
+			Debug.Assert(e.AddedItems.Count == 1);
+
+			this._filterSelection = e.AddedItems[0] as string;
+		}
+
+		private void SortChanged(object sender, SelectionChangedEventArgs e) {
+			Debug.Assert(e.AddedItems.Count == 1);
+
+			this._sortSelection = e.AddedItems[0] as string;
+			this.UpdateVisibleTimerList();
 		}
 	}
 }

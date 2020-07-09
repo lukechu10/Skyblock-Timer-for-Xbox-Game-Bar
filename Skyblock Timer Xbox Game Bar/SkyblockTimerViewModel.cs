@@ -10,7 +10,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 	public sealed class SkyblockTimerViewModel : INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		private TimeSpan _timeToEvent;
+		public TimeSpan TimeToEvent;
 		private DispatcherTimer _dispatcherTimer;
 		private static readonly HttpClient _httpClient = new HttpClient();
 
@@ -51,20 +51,20 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				ResponseSchema response = JsonConvert.DeserializeObject<ResponseSchema>(responseStr);
 				long estimateTimestamp = response.estimate; // unix time stamp for next spawn estimate
 				DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(estimateTimestamp).UtcDateTime;
-				this._timeToEvent = dateTime - DateTime.UtcNow;
+				this.TimeToEvent = dateTime - DateTime.UtcNow;
 
 				this._dispatcherTimer = new DispatcherTimer() {
 					Interval = TimeSpan.FromSeconds(1)
 				}; // update time every second
 
 				this._dispatcherTimer.Tick += (object sender, object e) => {
-					this._timeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
+					this.TimeToEvent -= TimeSpan.FromSeconds(1); // negate 1 second from timer
 
-					if (this._timeToEvent.TotalSeconds <= 0) {
+					if (this.TimeToEvent.TotalSeconds <= 0) {
 						_ = this.RefreshTimerWithServer(); // get next time from server
 					}
 					else {
-						this.RelativeTimeMessage = $"in about {this._timeToEvent.Hours} hours {this._timeToEvent.Minutes} minutes and {this._timeToEvent.Seconds} seconds";
+						this.RelativeTimeMessage = $"in about {this.TimeToEvent.Hours} hours {this.TimeToEvent.Minutes} minutes and {this.TimeToEvent.Seconds} seconds";
 					}
 				};
 

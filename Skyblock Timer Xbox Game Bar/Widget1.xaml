@@ -24,8 +24,27 @@
     <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Padding="10">
-            <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Style="{StaticResource ButtonRevealStyle}"/>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Style="{StaticResource ButtonRevealStyle}"/>
+                <Button Content="Sort" Style="{StaticResource ButtonRevealStyle}" Margin="12,0,0,0">
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel>
+                                <ComboBox Header="Filter" SelectedIndex="0" SelectionChanged="FilterChanged">
+                                    <x:String>All</x:String>
+                                    <x:String>Bosses</x:String>
+                                    <x:String>Events</x:String>
+                                </ComboBox>
 
+                                <ComboBox Header="Sort" SelectedIndex="1" SelectionChanged="SortChanged">
+                                    <x:String>Name</x:String>
+                                    <x:String>Time to event</x:String>
+                                </ComboBox>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
             <ListView x:Name="TimerList" SelectionMode="None" ItemTemplate="{StaticResource TimerListViewTemplate}"/>
         </StackPanel>
     </ScrollViewer>
