@@ -11,7 +11,7 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 		private readonly List<SkyblockTimerViewModel> _timerList;
 		//private List<SkyblockTimerViewModel> _visibleTimerList;
 		private string _filterSelection;
-		private string _sortSelection = "Time to event";
+		private string _sortSelection = "Name";
 
 		private List<Task> _refreshTaskList;
 
@@ -82,18 +82,20 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 				// always perform this step
 				this.RefreshButton.Content = "Refresh";
 				this.RefreshButton.IsEnabled = true;
-
 			}
 		}
 
 		private void FilterChanged(object sender, SelectionChangedEventArgs e) {
 			Debug.Assert(e.AddedItems.Count == 1);
+			this.SortFlyoutButton.Flyout?.Hide();
 
 			this._filterSelection = e.AddedItems[0] as string;
+			this.UpdateVisibleTimerList();
 		}
 
 		private void SortChanged(object sender, SelectionChangedEventArgs e) {
 			Debug.Assert(e.AddedItems.Count == 1);
+			this.SortFlyoutButton.Flyout?.Hide();
 
 			this._sortSelection = e.AddedItems[0] as string;
 			this.UpdateVisibleTimerList();
