@@ -75,9 +75,12 @@ namespace Skyblock_Timer_Xbox_Game_Bar {
 			}
 			finally {
 				// always perform this step
+				this.RefreshButton.Content = "Refreshed";
+				this.UpdateVisibleTimerList();
+
+				await Task.Delay(3000); // wait for 3 seconds before allowing to refresh again
 				this.RefreshButton.Content = "Refresh";
 				this.RefreshButton.IsEnabled = true;
-				this.UpdateVisibleTimerList();
 			}
 		}
 
